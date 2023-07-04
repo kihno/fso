@@ -92,7 +92,8 @@ function App() {
           notify("Added ", response.data.name)
         })
         .catch(error => {
-          console.log(error)
+          setType('error')
+          setMessage(error.response.data.error)
         })
     }
   }
