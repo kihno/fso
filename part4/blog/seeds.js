@@ -1,3 +1,16 @@
+const mongoose = require('mongoose')
+const Blog = require('./models/blog')
+const config = require('./utils/config')
+const logger = require('./utils/logger')
+
+mongoose.connect(config.MONGODB_URI, {
+  useNewUrlParser: true, useUnifiedTopology: true
+}).then(() => {
+  logger.info('MONGO CONNECTION OPEN')
+}).catch((err) => {
+  logger.error(err.message)
+})
+
 const blogs = [
   {
     _id: '5a422a851b54a676234d17f7',
@@ -48,5 +61,15 @@ const blogs = [
     __v: 0,
   },
 ]
+
+const seedDB = async () => {
+  await Blog.deleteMany({})
+  await Blog.insertMany(blogs)
+}
+
+seedDB().then(() => {
+  logger.info('DATABASE SEEDED')
+  mongoose.connection.close()
+})
 
 module.exports = blogs
