@@ -71,7 +71,17 @@ test('if likes is undefined, default is set to 0', async () => {
 
   const response = await api.post('/api/blogs').send(newBlog)
 
-  expect(response._body.likes).toBe(0)
+  expect(response.body.likes).toBe(0)
+})
+
+test('get with id returns single blog', async () => {
+  const blog = await Blog.findOne()
+
+  const response = await api.get(`/api/blogs/${blog.id}`)
+  const blogsAtEnd = await helper.blogsInDb()
+  const foundBlog = blogsAtEnd.filter((b) => { return b.id === blog.id })[0]
+
+  expect(response.body).toEqual(foundBlog)
 })
 
 test('blog without title is not added', async () => {

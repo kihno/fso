@@ -2,7 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "author": "kihno",
-    "url": "sampleurl3",
-    "likes": 0
+  "title": "User id is auto populated with random user",
+  "userId": "64a854fe3b20f81101e44696",
+  "url": "sampleurl"
 }
