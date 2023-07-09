@@ -1,8 +1,8 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY0YTg1NGZlM2IyMGY4MTEwMWU0NDY5NiIsImlhdCI6MTY4ODg1ODA1MSwiZXhwIjoxNjg4ODYxNjUxfQ.5CJxVICNLDD5srQNQL-wDq0FizQKX3A_OUBxVvbgf4g
 
 {
-  "title": "User id is auto populated with random user",
-  "userId": "64a854fe3b20f81101e44696",
+  "title": "test test",
   "url": "sampleurl"
 }

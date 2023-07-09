@@ -5,7 +5,6 @@ module.exports = {
     node: true,
     jest: true,
   },
-  extends: 'airbnb-base',
   overrides: [
     {
       env: {
