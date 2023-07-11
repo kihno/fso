@@ -1,5 +1,5 @@
 const Login = (props) => {
-  const { username, password, setUsername, setPassword, handleLogin, errorMessage } = props
+  const { username, password, setUsername, setPassword, handleLogin } = props
 
   return (
     <div>

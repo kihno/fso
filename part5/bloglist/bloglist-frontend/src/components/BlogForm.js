@@ -1,24 +1,23 @@
 import { useState } from 'react' 
-import blogService from '../services/blogs'
 
 const BlogForm = (props) => {
-  const { setNotice, setError } = props
+  const { createBlog } = props
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  const addBlog = async (event) => {
+  const addBlog = (event) => {
     event.preventDefault()
+    createBlog({
+      title,
+      author,
+      url
+    })
 
-    try {
-      const blog = await blogService.create({
-        title, author, url
-      })
-      setNotice(`${blog.title} by ${blog.author} has been created`)
-    } catch(exception) {
-      setError(exception.response.data.error)
-    }
+    setTitle('')
+    setAuthor('')
+    setUrl('')
   }
 
   return (

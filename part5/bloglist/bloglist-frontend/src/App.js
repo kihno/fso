@@ -5,6 +5,7 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import loginService from './services/login'
 import blogService from './services/blogs'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -18,7 +19,7 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
-  }, [notice])
+  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -26,6 +27,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -63,15 +65,47 @@ const App = () => {
     setUser(null)
   }
 
+  const addBlog = async (blogObject) => {
+    try {
+      const newBlog = await blogService.create(blogObject)
+      setBlogs(blogs.concat(newBlog))
+      setNotice(`${newBlog.title} by ${newBlog.author} has been created`)
+    } catch(exception) {
+      setError(exception.response.data.error)
+    }
+  }
+
+  const updateBlog = async (id, blogObject) => {
+    try {
+      const updatedBlog = await blogService.update(id, blogObject)
+      const updatedBlogs = blogs.filter(b => b.id !== id)
+      setBlogs(updatedBlogs.concat(updatedBlog))
+    } catch(exception) {
+      setError(exception.response.data.error)
+    }
+  }
+
+  const deleteBlog = async (id) => {
+    try {
+      await blogService.remove(id)
+      const updatedBlogs = blogs.filter(b => b.id !== id)
+      setBlogs(updatedBlogs)
+    } catch(exception) {
+      setError(exception.response.data.error)
+    }
+  }
+
   const Homepage = () => {
     return (
       <div>
         <h2>blogs</h2>
         <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+        <Togglable buttonLabel="new blog">
+          <BlogForm createBlog={addBlog} />
+        </Togglable>
+        {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
+          <Blog key={blog.id} blog={blog} user={user} updateBlog={updateBlog} deleteBlog={deleteBlog} />
         )}
-        <BlogForm setNotice={setNotice} setError={setError} />
       </div>
     )
   }
