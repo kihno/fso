@@ -55,9 +55,9 @@ const Blog = (props) => {
         null :
         <div className='togglableContent'>
           <div className='blog-url'><a href={blog.url}>{blog.url}</a></div>
-          <div className='blog-likes'>{blog.likes} <button onClick={updateLikes}>like</button></div>
+          <div className='blog-likes'>{blog.likes} <button className='like-btn' onClick={updateLikes}>like</button></div>
           <div className='blog-user'>{blog.user && blog.user.name}</div>
-          {blog.user && blog.user.username === user.username ? <button onClick={removeBlog}>remove</button> : null}
+          {blog.user && blog.user.username === user.username ? <button className="remove-btn" onClick={removeBlog}>remove</button> : null}
         </div>}
     </div>
   )

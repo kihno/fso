@@ -72,6 +72,9 @@ const App = () => {
       setNotice(`${newBlog.title} by ${newBlog.author} has been created`)
     } catch(exception) {
       setError(exception.response.data.error)
+      if(exception.response.data.error === 'token expired') {
+        setUser(null)
+      }
     }
   }
 
@@ -99,7 +102,7 @@ const App = () => {
     return (
       <div>
         <h2>blogs</h2>
-        <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
+        <p>{user.name} logged in <button id="logout-btn" onClick={handleLogout}>logout</button></p>
         <Togglable buttonLabel="new blog">
           <BlogForm createBlog={addBlog} />
         </Togglable>
