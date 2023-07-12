@@ -13,7 +13,7 @@ const Login = (props) => {
         </div>
         <button type="submit">login</button>
       </form>
-    </div>  
+    </div>
   )
 }
 

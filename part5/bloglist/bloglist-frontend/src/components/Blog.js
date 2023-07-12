@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 const Blog = (props) => {
   const { user, blog, updateBlog, deleteBlog } = props
@@ -49,17 +49,17 @@ const Blog = (props) => {
   }
 
   return (
-    <div style={blogStyle}>
-      {blog.title} {blog.author} <button onClick={handleClick}>{buttonLabel}</button>
+    <div className="blog" style={blogStyle}>
+      {blog.title} {blog.author} <button className='view-btn' onClick={handleClick}>{buttonLabel}</button>
       { hidden ?
-        null
-        : <div>
-            <div>{blog.url}</div>
-            <div>{blog.likes}<button onClick={updateLikes}>like</button></div>
-            <div>{blog.user && blog.user.name}</div>
-            {blog.user && blog.user.username === user.username ? <button onClick={removeBlog}>remove</button> : null}
-          </div>}
-    </div>  
+        null :
+        <div className='togglableContent'>
+          <div className='blog-url'><a href={blog.url}>{blog.url}</a></div>
+          <div className='blog-likes'>{blog.likes} <button onClick={updateLikes}>like</button></div>
+          <div className='blog-user'>{blog.user && blog.user.name}</div>
+          {blog.user && blog.user.username === user.username ? <button onClick={removeBlog}>remove</button> : null}
+        </div>}
+    </div>
   )
 }
 

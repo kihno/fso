@@ -18,7 +18,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
         username, password
@@ -114,8 +114,8 @@ const App = () => {
     <div>
       <Notification error={error} notice={notice} />
       { user ?
-        <Homepage />
-      : <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} handleLogin={handleLogin} />}
+        <Homepage /> :
+        <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} handleLogin={handleLogin} />}
     </div>
   )
 }
