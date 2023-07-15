@@ -4,12 +4,14 @@ import { upVote } from "../reducers/anecdoteReducer"
 const AnecdoteList = () => {
   const dispatch = useDispatch()
   const anecdotes = useSelector(({ filter, anecdotes }) => {
+    
     if (filter === '') {
       return anecdotes
     } else {
       return anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
     }
   })
+  const sorted = anecdotes.slice().sort((a,b) => b.votes - a.votes)
 
   const vote = (id) => {
     dispatch(upVote(id))
@@ -17,7 +19,7 @@ const AnecdoteList = () => {
 
   return(
     <div className="anecdotes">
-      {anecdotes.sort((a,b) => b.votes - a.votes).map(anecdote =>
+      {sorted.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
