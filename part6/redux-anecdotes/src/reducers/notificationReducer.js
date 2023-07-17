@@ -7,17 +7,21 @@ const notificationSlice = createSlice({
   initialState,
   reducers: {
     setMessage(state, action) {
-      if (action.payload.type === 'VOTE') {
-        return `you voted '${action.payload.content}'`
-      } else if (action.payload.type === 'CREATE') {
-        return `you created '${action.payload.content}'`
-      }
-    },
-    clearMessage(state, action) {
-      return null
+      return action.payload
     }
   }
 })
 
-export const { setMessage, clearMessage } = notificationSlice.actions
+export const { setMessage } = notificationSlice.actions
+
+export const setNotification = (message, time) => {
+  return async dispatch => {
+    const milliseconds = time * 1000
+    dispatch(setMessage(message))
+    setTimeout(() => {
+      dispatch(setMessage(null))
+    }, milliseconds)
+  }
+} 
+
 export default notificationSlice.reducer
