@@ -188,7 +188,8 @@ const resolvers = {
   },
   Author: {
     bookCount: async (root) => {
-      const authorsBooks = Book.find({ author: root })
+      const author = await Author.findOne({ name: root.name })
+      const authorsBooks = await Book.find({ author: author })
       return authorsBooks.length
     }
   },
@@ -240,8 +241,8 @@ const resolvers = {
         const newAuthor = new Author({
           name: args.author,
         })
-        //newAuthor.save()
-        author = newAuthor
+        newAuthor.save()
+        author = Author.findOne({ name: args.author })
       }
 
       const book = new Book({
@@ -303,7 +304,7 @@ startStandaloneServer(server, {
   listen: { port: 4000 },
   context: async ({ req, res }) => {
     const auth = req ? req.headers.authorization : null
-    if (auth && auth.startsWith('Bearer ')) {
+    if (auth && auth.startsWith('bearer ')) {
       const decodedToken = jwt.verify(
         auth.substring(7), process.env.JWT_SECRET
       )
