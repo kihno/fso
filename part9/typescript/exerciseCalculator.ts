@@ -23,18 +23,18 @@ const parseArguments = (args: string[]): ExcerciseValues => {
     return {
       target: Number(args[2]),
       daily: hours.map((hour) => Number(hour))
-    }
+    };
   } else {
     throw new Error('Provided values were not number!');
   }
-}
+};
 
-const calculateExercises = (target: number, daily: number[]): Results => {
+export const calculateExercises = (target: number, daily: number[]): Results => {
   const periodLength = daily.length;
 
   const trainingDays = daily.reduce((total, current) => {
     return current === 0 ? total : total + 1;
-  }, 0)
+  }, 0);
 
   const average = daily.reduce((partial, a) => partial + a, 0) / periodLength;
 
@@ -61,8 +61,8 @@ const calculateExercises = (target: number, daily: number[]): Results => {
     ratingDescription,
     target,
     average
-  }
-}
+  };
+};
 
 try {
   const { target, daily } = parseArguments(process.argv);
