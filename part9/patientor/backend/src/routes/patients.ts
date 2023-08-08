@@ -27,6 +27,6 @@ router.get('/:id', (req, res) => {
   const patients = patientService.getPatients();
   const patient = patients.find(p => p.id === req.params.id);
   res.send(patient);
-})
+});
 
 export default router;
