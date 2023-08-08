@@ -1,4 +1,4 @@
-import { NewPatient, Gender } from "./types";
+import { NewPatient, Gender, Entry, NewEntry } from "./types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -43,7 +43,7 @@ const parseOccupation = (occupation: unknown): string => {
   return occupation;
 };
 
-const toNewPatient = (object: unknown): NewPatient => {
+export const toNewPatient = (object: unknown): NewPatient => {
   if (!object || typeof object !== 'object') {
     throw new Error('Incorrect or missing data.');
   }
@@ -61,4 +61,55 @@ const toNewPatient = (object: unknown): NewPatient => {
   throw new Error('Incorrect data: some fields are missing.');
 };
 
-export default toNewPatient;
+const parseType = (type: unknown): string => {
+
+};
+
+const parseDate = (date: unknown): string => {
+
+};
+
+const parseDiagnosesCodes = (diagnosisCodes: unknown): string[] => {
+
+};
+
+const parseSpecialist = (specialist: unknown): string => {
+
+};
+
+const parseDescription = (description: unknown): string => {
+
+};
+
+const createBaseEntry = (entry: Entry): NewEntry => {
+  const newEntry: NewEntry = {
+    type: parseType(entry.type),
+    date: parseDate(entry.date),
+    specialist: parseSpecialist(entry.specialist),
+    description: parseDescription(entry.description),
+  };
+  if (entry.diagnosisCodes)
+    newEntry.diagnosisCodes = parseDiagnosesCodes(entry.diagnosisCodes);
+  return newEntry;
+};
+
+export const toNewEntry = (object: unknown): NewEntry => {
+  if (!object || typeof object !== 'object') {
+    throw new Error('Incorrect or missing data.');
+  }
+
+  if ('date' in object && 'type' in object && 'specialist' in object && 'description' in object) {
+    switch(object.type) {
+      case "Hospital":
+        const newEntry: NewEntry = {
+          ...createBaseEntry(object)
+        }
+        return newEntry;
+      case "OccupationalHealthcare":
+
+      case "HealthCheck":
+    }
+
+  }
+};
+
