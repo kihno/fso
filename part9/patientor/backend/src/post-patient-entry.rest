@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "date": "2023-07-20",
+  "specialist": "Dr. Genaro",
+  "type": "HealthCheck",
+  "description": "Patient experiencing delusions of granduer.",
+  "healthCheckRating": 3
+}

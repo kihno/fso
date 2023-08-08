@@ -35,11 +35,13 @@ const addPatient = (patient: NewPatient): Patient => {
   return newPatient;
 };
 
-const addEntry = (entry: NewEntry): Entry => {
+const addEntry = (entry: NewEntry, id: string): Entry => {
+  const patient = getById(id);
   const newEntry = {
     id: id,
     ...entry
   };
+  patient?.entries?.push(newEntry);
 
   return newEntry;
 };
