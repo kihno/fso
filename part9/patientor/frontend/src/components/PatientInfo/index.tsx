@@ -1,14 +1,16 @@
-import { Diagnosis, Entry, Patient, HealthCheckEntry } from "../../types";
+import axios from 'axios';
+import { Button } from '@mui/material';
+import { Entry, Patient, EntryFormValues } from "../../types";
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import TransgenderIcon from '@mui/icons-material/Transgender';
 import React, { useEffect, useState } from "react";
 import patientService from '../../services/patients';
-import diagnosesService from '../../services/diagnoses';
 import { useParams } from "react-router-dom";
 import Hospital from "./Hospital";
 import OccupationalHealthcare from "./OccupationalHealthcare";
 import HealthCheck from "./HealthCheck";
+import AddEntryModal from '../AddEntryModal';
 
 type PatientParams = {
   id: string;
@@ -17,6 +19,8 @@ type PatientParams = {
 const PatientInfo = () => {
   const { id } = useParams<PatientParams>();
   const [patient, setPatient] = useState<Patient>();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
 
   useEffect(() => {
     if (!id) {
@@ -53,6 +57,34 @@ const PatientInfo = () => {
     padding: "5px",
     marginBottom: "5px"
   }
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
+  const submitNewEntry = async (values: EntryFormValues) => {
+    try {
+      // const patient = await patientService.create(values);
+      // setPatients(patients.concat(patient));
+      setModalOpen(false);
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        if (e?.response?.data && typeof e?.response?.data === "string") {
+          const message = e.response.data.replace('Something went wrong. Error: ', '');
+          console.error(message);
+          setError(message);
+        } else {
+          setError("Unrecognized axios error");
+        }
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
+    }
+  };
 
   const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
     const assertNever = (value: Entry): never => {
@@ -92,6 +124,15 @@ const PatientInfo = () => {
           )
         })}
       </div>
+      <AddEntryModal
+        modalOpen={modalOpen}
+        onSubmit={submitNewEntry}
+        error={error}
+        onClose={closeModal}
+      />
+      <Button variant="contained" onClick={() => openModal()}>
+        Add New Patient
+      </Button>
     </div>
   )
 }
