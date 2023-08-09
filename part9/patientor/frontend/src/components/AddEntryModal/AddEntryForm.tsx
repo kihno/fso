@@ -1,22 +1,28 @@
 import { useState, SyntheticEvent } from "react";
 
-import {  TextField, InputLabel, MenuItem, Select, Grid, Button, SelectChangeEvent } from '@mui/material';
+import {  FormControl, TextField, InputLabel, MenuItem, Select, Grid, Button, SelectChangeEvent } from '@mui/material';
 
-import { EntryFormValues, Gender } from "../../types";
+import { Entry, EntryFormValues, EntryTypes } from "../../types";
 
 interface Props {
   onCancel: () => void;
   onSubmit: (values: EntryFormValues) => void;
 }
 
-interface GenderOption{
-  value: Gender;
-  label: string;
-}
+// interface GenderOption{
+//   value: Gender;
+//   label: string;
+// }
 
-const genderOptions: GenderOption[] = Object.values(Gender).map(v => ({
-  value: v, label: v.toString()
-}));
+// const genderOptions: GenderOption[] = Object.values(Gender).map(v => ({
+//   value: v, label: v.toString()
+// }));
+
+const entryOptions : EntryOption[] = [
+  { value: EntryTypes.HealthCheck, label: "HealthCheck" },
+  { value: EntryTypes.OccupationalHealthcare, label: "OccupationalHealthcare" },
+  { value: EntryTypes.Hospital, label: "Hospital" }
+];
 
 const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
   const [type, setType] = useState('');
@@ -36,6 +42,17 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
   //   }
   // };
 
+  const onTypeChange = (event: SelectChangeEvent<string>) => {
+    event.preventDefault();
+    if (typeof event.target.value === 'string') {
+      const value = event.target.value;
+      const type = Object.values(EntryTypes).find(t => t.toString() === value);
+      if (type) {
+        setType(type);
+      }
+    }
+  }
+
   const addEntry = (event: SyntheticEvent) => {
     event.preventDefault();
     onSubmit({
@@ -49,33 +66,41 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
   return (
     <div>
       <form onSubmit={addEntry}>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Age</InputLabel>
+          <Select
+            labelId="type"
+            id="type"
+            value={type}
+            label="Type"
+            onChange={onTypeChange}
+          >
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
+        </FormControl>
         <TextField
-          label="Name"
+          label="Date"
           fullWidth 
-          value={name}
-          onChange={({ target }) => setName(target.value)}
+          value={date}
+          onChange={({ target }) => setDate(target.value)}
         />
         <TextField
-          label="Social security number"
+          label="Specialist"
           fullWidth
-          value={ssn}
-          onChange={({ target }) => setSsn(target.value)}
+          value={specialist}
+          onChange={({ target }) => setSpecialist(target.value)}
         />
         <TextField
-          label="Date of birth"
+          label="Description"
           placeholder="YYYY-MM-DD"
           fullWidth
-          value={dateOfBirth}
-          onChange={({ target }) => setDateOfBirth(target.value)}
-        />
-        <TextField
-          label="Occupation"
-          fullWidth
-          value={occupation}
-          onChange={({ target }) => setOccupation(target.value)}
+          value={description}
+          onChange={({ target }) => setDescription(target.value)}
         />
 
-        <InputLabel style={{ marginTop: 20 }}>Gender</InputLabel>
+        {/* <InputLabel style={{ marginTop: 20 }}>Gender</InputLabel>
         <Select
           label="Gender"
           fullWidth
@@ -90,7 +115,7 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
             {option.label
           }</MenuItem>
         )}
-        </Select>
+        </Select> */}
 
         <Grid>
           <Grid item>
