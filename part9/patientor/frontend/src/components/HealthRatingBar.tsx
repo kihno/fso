@@ -18,10 +18,10 @@ const StyledRating = styled(Rating)({
 });
 
 const HEALTHBAR_TEXTS = [
-  "The patient is in great shape",
-  "The patient has a low risk of getting sick",
-  "The patient has a high risk of getting sick",
   "The patient has a diagnosed condition",
+  "The patient has a high risk of getting sick",
+  "The patient has a low risk of getting sick",
+  "The patient is in great shape",
 ];
 
 const HealthRatingBar = ({ rating, showText }: BarProps) => {
@@ -29,12 +29,12 @@ const HealthRatingBar = ({ rating, showText }: BarProps) => {
     <div className="health-bar">
       <StyledRating
         readOnly
-        value={4 - rating}
+        value={0 + rating}
         max={4}
         icon={<Favorite fontSize="inherit" />}
       />
 
-      {showText ? <p>{HEALTHBAR_TEXTS[rating]}</p> : null}
+      {showText ? <p>{HEALTHBAR_TEXTS[rating - 1]}</p> : null}
     </div>
   );
 };

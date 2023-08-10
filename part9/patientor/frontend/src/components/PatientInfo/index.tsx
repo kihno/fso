@@ -67,9 +67,13 @@ const PatientInfo = () => {
 
   const submitNewEntry = async (values: EntryFormValues) => {
     try {
-      // const patient = await patientService.create(values);
-      // setPatients(patients.concat(patient));
-      setModalOpen(false);
+      const entry = await patientService.addEntry(values, patient.id);
+      const updatedPatient = {
+        ...patient,
+        entries: patient.entries?.concat(entry)
+      }
+      setPatient(updatedPatient);
+      closeModal();
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
         if (e?.response?.data && typeof e?.response?.data === "string") {
@@ -131,7 +135,7 @@ const PatientInfo = () => {
         onClose={closeModal}
       />
       <Button variant="contained" onClick={() => openModal()}>
-        Add New Patient
+        Add New Entry
       </Button>
     </div>
   )

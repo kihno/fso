@@ -11,10 +11,10 @@ export enum Gender {
 }
 
 export enum HealthCheckRating {
-  "Healthy" = 0,
-  "LowRisk" = 1,
+  "Healthy" = 4,
+  "LowRisk" = 3,
   "HighRisk" = 2,
-  "CriticalRisk" = 3,
+  "CriticalRisk" = 1,
 }
 
 export interface BaseEntry {

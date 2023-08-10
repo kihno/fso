@@ -1,54 +1,35 @@
+import { Button, Grid, TextField } from "@mui/material";
+import { EntryFormValues, EntryTypes } from "../../types";
 import { useState, SyntheticEvent } from "react";
-
-import {  FormControl, TextField, InputLabel, MenuItem, Select, Grid, Button, SelectChangeEvent } from '@mui/material';
-
-import { Entry, EntryFormValues, EntryTypes } from "../../types";
 
 interface Props {
   onCancel: () => void;
   onSubmit: (values: EntryFormValues) => void;
 }
 
-// interface GenderOption{
-//   value: Gender;
-//   label: string;
-// }
-
-// const genderOptions: GenderOption[] = Object.values(Gender).map(v => ({
-//   value: v, label: v.toString()
-// }));
-
-const entryOptions : EntryOption[] = [
-  { value: EntryTypes.HealthCheck, label: "HealthCheck" },
-  { value: EntryTypes.OccupationalHealthcare, label: "OccupationalHealthcare" },
-  { value: EntryTypes.Hospital, label: "Hospital" }
-];
-
 const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
-  const [type, setType] = useState('');
   const [date, setDate] = useState('');
-  const [description, setDescription] = useState('');
   const [specialist, setSpecialist] = useState('');
-  //const [gender, setGender] = useState(Gender.Other);
+  const [description, setDescription] = useState('');
+  const [healthCheckRating, setHealthCheckRating] = useState('');
+  const [diagnosisCodes, setDiagnosisCodes] = useState([""]);
 
-  // const onGenderChange = (event: SelectChangeEvent<string>) => {
+  // const onHealthCheckChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
   //   event.preventDefault();
-  //   if ( typeof event.target.value === "string") {
-  //     const value = event.target.value;
-  //     const gender = Object.values(Gender).find(g => g.toString() === value);
-  //     if (gender) {
-  //       setGender(gender);
+  //   if (typeof event.target.value === 'string' ) {
+  //     const rating = parseInt(event.target.value);
+  //     if (rating) {
+  //       setHealthCheckRating(rating);
   //     }
   //   }
-  // };
+  // }
 
-  const onTypeChange = (event: SelectChangeEvent<string>) => {
+  const onDiagnosisChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     event.preventDefault();
-    if (typeof event.target.value === 'string') {
-      const value = event.target.value;
-      const type = Object.values(EntryTypes).find(t => t.toString() === value);
-      if (type) {
-        setType(type);
+    if (typeof event.target.value === 'string' ) {
+      const diagnosis = event.target.value.split(", ");
+      if (diagnosis) {
+        setDiagnosisCodes(diagnosis);
       }
     }
   }
@@ -56,30 +37,18 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
   const addEntry = (event: SyntheticEvent) => {
     event.preventDefault();
     onSubmit({
-      type,
-      date, 
+      type: EntryTypes.HealthCheck,
+      date,
+      specialist,
       description,
-      specialist
+      diagnosisCodes,
+      healthCheckRating: parseInt(healthCheckRating)
     });
-  };
+  }
 
-  return (
+  return(
     <div>
       <form onSubmit={addEntry}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Age</InputLabel>
-          <Select
-            labelId="type"
-            id="type"
-            value={type}
-            label="Type"
-            onChange={onTypeChange}
-          >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
         <TextField
           label="Date"
           fullWidth 
@@ -94,29 +63,22 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
         />
         <TextField
           label="Description"
-          placeholder="YYYY-MM-DD"
           fullWidth
           value={description}
           onChange={({ target }) => setDescription(target.value)}
         />
-
-        {/* <InputLabel style={{ marginTop: 20 }}>Gender</InputLabel>
-        <Select
-          label="Gender"
+        <TextField
+          label="Healthcheck rating"
           fullWidth
-          value={gender}
-          onChange={onGenderChange}
-        >
-        {genderOptions.map(option =>
-          <MenuItem
-            key={option.label}
-            value={option.value}
-          >
-            {option.label
-          }</MenuItem>
-        )}
-        </Select> */}
-
+          value={healthCheckRating?.toString()}
+          onChange={({ target }) => setHealthCheckRating(target.value)}
+        />
+        <TextField
+          label="Diagnosis codes"
+          fullWidth
+          value={diagnosisCodes}
+          onChange={onDiagnosisChange}
+        />
         <Grid>
           <Grid item>
             <Button
@@ -143,7 +105,7 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
         </Grid>
       </form>
     </div>
-  );
+  )
 };
 
 export default AddEntryForm;
