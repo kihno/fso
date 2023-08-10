@@ -6,7 +6,7 @@ const Hospital= ({ entry }: { entry: HospitalEntry }) => {
     <div>
       {entry.diagnosisCodes &&
         <ul>
-          {entry.diagnosisCodes.map(code => <DiagnosisList code={code} />)}
+          {entry.diagnosisCodes.map(code => <DiagnosisList key={code} code={code} />)}
         </ul>
       }
       <div>discharged: {entry.discharge.date}, {entry.discharge.criteria}</div>

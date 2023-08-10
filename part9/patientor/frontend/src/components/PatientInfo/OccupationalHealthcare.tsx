@@ -9,7 +9,7 @@ const OccupationalHealthcare = ({ entry }: { entry: OccupationalHealthcareEntry 
       <div>sick leave: {entry.sickLeave ? <span>{entry.sickLeave?.startDate} - {entry.sickLeave?.endDate}</span> : "none"}</div>
       {entry.diagnosisCodes &&
         <ul>
-          {entry.diagnosisCodes.map(code => <DiagnosisList code={code} />)}
+          {entry.diagnosisCodes.map(code => <DiagnosisList key={code} code={code} />)}
         </ul>
       }
     </div>

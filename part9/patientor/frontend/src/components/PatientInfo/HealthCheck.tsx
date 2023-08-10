@@ -7,7 +7,7 @@ const HealthCheck = ({ entry }: { entry: HealthCheckEntry }) => {
     <div>
       {entry.diagnosisCodes &&
         <ul>
-          {entry.diagnosisCodes.map(code => <DiagnosisList code={code} />)}
+          {entry.diagnosisCodes.map(code => <DiagnosisList key={code} code={code} />)}
         </ul>
       }
       <HealthRatingBar rating={entry.healthCheckRating} showText={true} />

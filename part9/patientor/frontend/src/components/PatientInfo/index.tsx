@@ -118,7 +118,7 @@ const PatientInfo = () => {
         <h3>entries</h3>
         {patient.entries && patient.entries.map(entry => {
           return (
-            <div style={entryStyle} key={entry.id}>
+            <div style={entryStyle} key={entry.id} className={entry.id}>
               <p>{entry.date} <i>{entry.description}</i></p>
               <div>type: {entry.type}</div>
               <div>specialist: {entry.specialist}</div>

@@ -6,5 +6,6 @@ Content-Type: application/json
   "specialist": "Dr. Gennaro",
   "type": "HealthCheck",
   "description": "Patient experiencing delusions of granduer.",
+  "diagnosisCodes": ["Z74.3", "M51.2"],
   "healthCheckRating": 3
 }
