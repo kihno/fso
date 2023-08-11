@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import { Button, Grid, TextField, InputLabel, Select, MenuItem, SelectChangeEvent, Input, FormControl } from "@mui/material";
 import { EntryFormValues, EntryType, Diagnosis, HealthCheckRating } from "../../types";
 import { useState, useEffect, SyntheticEvent } from "react";
 import diagnosisService from "../../services/diagnoses"
@@ -124,11 +124,9 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
         )}
         </Select>
 
-        <label htmlFor="date">Date </label>
-        <input
+        <TextField
           type="date"
-          id="date"
-          name="date" 
+          fullWidth
           value={date}
           onChange={({ target }) => setDate(target.value)}
         />
@@ -184,11 +182,10 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
         {type === "Hospital" &&
           <div>
           <InputLabel style={{ marginTop: 20 }}>Discharge</InputLabel>
-          <label htmlFor="date">Date </label>
-          <input
+          <TextField
             type="date"
-            id="dischargeDate"
             name="dischargeDate" 
+            fullWidth
             value={dischargeDate}
             onChange={({ target }) => setDischargeDate(target.value)}
           />
@@ -209,22 +206,28 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
               onChange={({ target }) => setEmployerName(target.value)}
             />
             <InputLabel style={{ marginTop: 20 }}>Sick Leave</InputLabel>
-            <label htmlFor="date">Start date </label>
-            <input
-              type="date"
-              id="startDate"
-              name="startDate" 
-              value={startDate}
-              onChange={({ target }) => setStartDate(target.value)}
-            />
-            <label htmlFor="date">End date </label>
-            <input
-              type="date"
-              id="endDate"
-              name="endDate" 
-              value={endDate}
-              onChange={({ target }) => setEndDate(target.value)}
-            />
+              <Grid style={{ marginBottom: 100 }}>
+                <Grid item style={{ float: "left", marginLeft: 40 }}>
+              <InputLabel htmlFor="date">Start date </InputLabel>
+              <TextField
+                type="date"
+                id="startDate"
+                name="startDate" 
+                value={startDate}
+                onChange={({ target }) => setStartDate(target.value)}
+              />
+              </Grid>
+              <Grid item style={{ float: "right", marginRight: 40 }}>
+              <InputLabel htmlFor="date">End date </InputLabel>
+              <TextField
+                type="date"
+                id="endDate"
+                name="endDate" 
+                value={endDate}
+                onChange={({ target }) => setEndDate(target.value)}
+              />
+              </Grid>
+              </Grid>
           </div>
         }
         <Grid style={{ marginTop: 20 }}>
