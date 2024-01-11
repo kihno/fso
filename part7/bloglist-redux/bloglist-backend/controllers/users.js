@@ -1,35 +1,35 @@
-const bcrypt = require('bcrypt')
-const usersRouter = require('express').Router()
-const User = require('../models/user')
+const bcrypt = require("bcrypt");
+const usersRouter = require("express").Router();
+const User = require("../models/user");
 
-usersRouter.get('/', async (request, response) => {
-  const users = await User
-    .find({})
-    .populate('blogs', { user: 0 })
+usersRouter.get("/", async (request, response) => {
+  const users = await User.find({}).populate("blogs", { user: 0 });
 
-  response.json(users)
-})
+  response.json(users);
+});
 
-usersRouter.post('/', async (request, response) => {
-  const { username, name, password } = request.body
+usersRouter.post("/", async (request, response) => {
+  const { username, name, password } = request.body;
 
   if (password === undefined) {
-    return response.status(400).json({ error: 'Password is required' })
+    return response.status(400).json({ error: "Password is required" });
   } else if (password.length < 3) {
-    return response.status(400).json({ error: 'Password must be longer than 3 characters' })
+    return response
+      .status(400)
+      .json({ error: "Password must be longer than 3 characters" });
   }
 
-  const passwordHash = await bcrypt.hash(password, 10)
+  const passwordHash = await bcrypt.hash(password, 10);
 
   const user = new User({
     username,
     name,
     passwordHash,
-  })
+  });
 
-  const savedUser = await user.save()
+  const savedUser = await user.save();
 
-  response.status(201).json(savedUser)
-})
+  response.status(201).json(savedUser);
+});
 
-module.exports = usersRouter
+module.exports = usersRouter;

@@ -1,12 +1,12 @@
 const Notification = (props) => {
-  const { error, notice } = props
+  const { error, notice } = props;
 
   return (
     <div>
-      { error ? <div className="error">{error}</div> : null }
-      { notice ? <div className="notice">{notice}</div> : null }
+      {error ? <div className="error">{error}</div> : null}
+      {notice ? <div className="notice">{notice}</div> : null}
     </div>
-  )
-}
+  );
+};
 
-export default Notification
+export default Notification;
