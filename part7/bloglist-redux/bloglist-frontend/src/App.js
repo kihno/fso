@@ -6,19 +6,16 @@ import Notification from './components/Notification'
 import loginService from './services/login'
 import blogService from './services/blogs'
 import Togglable from './components/Togglable'
+import { useDispatch } from 'react-redux'
 
 import { setNotification } from './reducers/notificationReducer'
-import { useDispatch, useSelector } from 'react-redux'
+import { setError } from './reducers/errorReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [error, setError] = useState(null)
-  //const [notice, setNotice] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-
-  const notification = useSelector(state => state.notification)
 
   const dispatch = useDispatch()
 
@@ -36,18 +33,6 @@ const App = () => {
     }
   }, [])
 
-  useEffect(() => {
-    setTimeout(() => {
-      setError(null)
-    }, 5000)
-  }, [error])
-
-  useEffect(() => {
-    setTimeout(() => {
-      dispatch(setNotification(''))
-    }, 5000)
-  }, [notification])
-
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -62,7 +47,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setError('Wrong username or password')
+      dispatch(setError('Wrong username or password'))
     }
   }
 
@@ -77,7 +62,7 @@ const App = () => {
       setBlogs(blogs.concat(newBlog))
       dispatch(setNotification(`${newBlog.title} by ${newBlog.author} has been created`))
     } catch (exception) {
-      setError(exception.response.data.error)
+      dispatch(setError(exception.response.data.error))
       if (exception.response.data.error === 'token expired') {
         setUser(null)
       }
@@ -90,7 +75,7 @@ const App = () => {
       const updatedBlogs = blogs.filter((b) => b.id !== id)
       setBlogs(updatedBlogs.concat(updatedBlog))
     } catch (exception) {
-      setError(exception.response.data.error)
+      dispatch(setError(exception.response.data.error))
     }
   }
 
@@ -100,7 +85,7 @@ const App = () => {
       const updatedBlogs = blogs.filter((b) => b.id !== id)
       setBlogs(updatedBlogs)
     } catch (exception) {
-      setError(exception.response.data.error)
+      dispatch(setError(exception.response.data.error))
     }
   }
 
@@ -134,7 +119,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification error={error} />
+      <Notification />
       {user ? (
         <Homepage />
       ) : (
