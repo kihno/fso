@@ -1,10 +1,15 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+
+import { removeBlog, updateBlog } from '../reducers/blogsReducer'
 
 const Blog = (props) => {
-  const { user, blog, updateBlog, deleteBlog } = props
+  const { user, blog } = props
 
   const [buttonLabel, setButtonLabel] = useState('view')
   const [hidden, setHidden] = useState(true)
+
+  const dispatch = useDispatch()
 
   const blogStyle = {
     paddingTop: 10,
@@ -26,25 +31,24 @@ const Blog = (props) => {
     setHidden(!hidden)
   }
 
+  //Malformatted id when liking a blog created by same user
+
   const updateLikes = (event) => {
     event.preventDefault()
 
     const updatedBlog = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-      user: blog.user.id,
+      ...blog,
+      likes: blog.likes + 1
     }
 
-    updateBlog(blog.id, updatedBlog)
+    dispatch(updateBlog(blog.id, updatedBlog))
   }
 
-  const removeBlog = (event) => {
+  const deleteBlog = (event) => {
     event.preventDefault()
 
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      deleteBlog(blog.id)
+      dispatch(removeBlog(blog.id))
     }
   }
 
@@ -67,7 +71,7 @@ const Blog = (props) => {
           </div>
           <div className='blog-user'>{blog.user && blog.user.name}</div>
           {blog.user && blog.user.username === user.username ? (
-            <button className='remove-btn' onClick={removeBlog}>
+            <button className='remove-btn' onClick={deleteBlog}>
               remove
             </button>
           ) : null}
