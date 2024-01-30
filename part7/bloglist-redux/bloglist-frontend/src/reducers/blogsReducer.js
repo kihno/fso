@@ -3,6 +3,7 @@ import blogService from '../services/blogs'
 
 import { setNotification } from './notificationReducer'
 import { setError } from './errorReducer'
+import { setUser } from './userReducer'
 
 const blogsSlice = createSlice({
   name: 'blogs',
@@ -41,9 +42,9 @@ export const createBlog = content => {
       dispatch(setNotification(`${newBlog.title} by ${newBlog.author} has been created`))
     } catch (exception) {
       dispatch(setError(exception.response.data.error))
-      // if (exception.response.data.error === 'token expired') {
-      //   setUser(null)
-      // }
+      if (exception.response.data.error === 'token expired') {
+        dispatch(setUser(null))
+      }
     }
   }
 }
@@ -55,9 +56,9 @@ export const removeBlog = id => {
       dispatch(deleteBlog(id))
     } catch (exception) {
       dispatch(setError(exception.response.data.error))
-      // if (exception.response.data.error === 'token expired') {
-      //   setUser(null)
-      // }
+      if (exception.response.data.error === 'token expired') {
+        dispatch(setUser(null))
+      }
     }
   }
 }
@@ -70,9 +71,9 @@ export const updateBlog = (id, blogObject) => {
     } catch (exception) {
       console.log(exception.response)
       dispatch(setError(exception.response.data.error))
-      // if (exception.response.data.error === 'token expired') {
-      //   setUser(null)
-      // }
+      if (exception.response.data.error === 'token expired') {
+        dispatch(setUser(null))
+      }
     }
   }
 }
