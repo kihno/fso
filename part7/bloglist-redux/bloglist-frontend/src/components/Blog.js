@@ -1,13 +1,15 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { removeBlog, updateBlog } from '../reducers/blogsReducer'
 
 const Blog = (props) => {
-  const { user, blog } = props
+  const { blog } = props
 
   const [buttonLabel, setButtonLabel] = useState('view')
   const [hidden, setHidden] = useState(true)
+
+  const user = useSelector(state => state.user)
 
   const dispatch = useDispatch()
 
@@ -31,13 +33,13 @@ const Blog = (props) => {
     setHidden(!hidden)
   }
 
-  //Malformatted id when liking a blog created by same user
-
   const updateLikes = (event) => {
     event.preventDefault()
 
     const updatedBlog = {
-      ...blog,
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
       likes: blog.likes + 1
     }
 

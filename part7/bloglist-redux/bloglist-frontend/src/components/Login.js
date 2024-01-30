@@ -1,5 +1,35 @@
-const Login = (props) => {
-  const { username, password, setUsername, setPassword, handleLogin } = props
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+
+import loginService from '../services/login'
+import blogService from '../services/blogs'
+
+import { setUser } from '../reducers/userReducer'
+import { setError } from '../reducers/errorReducer'
+
+const Login = () => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const dispatch = useDispatch()
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+
+    try {
+      const user = await loginService.login({
+        username,
+        password,
+      })
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      dispatch(setUser(user))
+      blogService.setToken(user.token)
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      dispatch(setError('Wrong username or password'))
+    }
+  }
 
   return (
     <div>

@@ -1,17 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
+import Homepage from './components/Homepage'
 import Login from './components/Login'
-import BlogList from './components/BlogList'
 import Notification from './components/Notification'
-import loginService from './services/login'
-import blogService from './services/blogs'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { setError } from './reducers/errorReducer'
+import { setUser } from './reducers/userReducer'
+import blogService from './services/blogs'
 
 const App = () => {
-  const [user, setUser] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const user = useSelector(state => state.user)
 
   const dispatch = useDispatch()
 
@@ -20,48 +17,10 @@ const App = () => {
 
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      dispatch(setUser(user))
       blogService.setToken(user.token)
     }
   }, [])
-
-  const handleLogin = async (event) => {
-    event.preventDefault()
-
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
-      setUser(user)
-      blogService.setToken(user.token)
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      dispatch(setError('Wrong username or password'))
-    }
-  }
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedUser')
-    setUser(null)
-  }
-
-  const Homepage = () => {
-    return (
-      <div>
-        <h2>blogs</h2>
-        <p>
-          {user.name} logged in{' '}
-          <button id='logout-btn' onClick={handleLogout}>
-            logout
-          </button>
-        </p>
-        <BlogList user={user} setUser={setUser} />
-      </div>
-    )
-  }
 
   return (
     <div>
@@ -69,13 +28,7 @@ const App = () => {
       {user ? (
         <Homepage />
       ) : (
-        <Login
-          username={username}
-          password={password}
-          setUsername={setUsername}
-          setPassword={setPassword}
-          handleLogin={handleLogin}
-        />
+        <Login />
       )}
     </div>
   )

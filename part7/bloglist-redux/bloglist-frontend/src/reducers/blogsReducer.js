@@ -14,6 +14,14 @@ const blogsSlice = createSlice({
     appendBlog(state, action) {
       state.push(action.payload)
     },
+    editBlog(state, action) {
+      return state.map(blog =>
+        blog.id !== action.payload.id ? blog : action.payload
+      )
+    },
+    deleteBlog(state, action) {
+      return state.filter(blog => blog.id !== action.payload)
+    }
   }
 })
 
@@ -29,7 +37,6 @@ export const createBlog = content => {
   return async dispatch => {
     try {
       const newBlog = await blogService.create(content)
-      console.log(newBlog)
       dispatch(appendBlog(newBlog))
       dispatch(setNotification(`${newBlog.title} by ${newBlog.author} has been created`))
     } catch (exception) {
@@ -45,7 +52,7 @@ export const removeBlog = id => {
   return async dispatch => {
     try {
       await blogService.remove(id)
-      dispatch(initializeBlogs())
+      dispatch(deleteBlog(id))
     } catch (exception) {
       dispatch(setError(exception.response.data.error))
       // if (exception.response.data.error === 'token expired') {
@@ -58,9 +65,10 @@ export const removeBlog = id => {
 export const updateBlog = (id, blogObject) => {
   return async dispatch => {
     try {
-      await blogService.update(id, blogObject)
-      dispatch(initializeBlogs())
+      const updatedBlog = await blogService.update(id, blogObject)
+      dispatch(editBlog(updatedBlog))
     } catch (exception) {
+      console.log(exception.response)
       dispatch(setError(exception.response.data.error))
       // if (exception.response.data.error === 'token expired') {
       //   setUser(null)
@@ -69,5 +77,5 @@ export const updateBlog = (id, blogObject) => {
   }
 }
 
-export const { setBlogs, appendBlog, deleteBlog } = blogsSlice.actions
+export const { setBlogs, appendBlog, editBlog, deleteBlog } = blogsSlice.actions
 export default blogsSlice.reducer
