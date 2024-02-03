@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import Login from './components/Login'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
@@ -6,14 +6,17 @@ import Notification from './components/Notification'
 import loginService from './services/login'
 import blogService from './services/blogs'
 import Togglable from './components/Togglable'
+import NotificationContext from './context/notificationContext'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [error, setError] = useState(null)
-  const [notice, setNotice] = useState(null)
+  // const [notice, setNotice] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  const [notification, notificationDispatch] = useContext(NotificationContext)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -39,9 +42,9 @@ const App = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      setNotice(null)
+      notificationDispatch({ type: 'CLEAR' })
     }, 5000)
-  }, [notice])
+  }, [notification])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -69,7 +72,7 @@ const App = () => {
     try {
       const newBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(newBlog))
-      setNotice(`${newBlog.title} by ${newBlog.author} has been created`)
+      notificationDispatch({ type: 'CREATE', payload: newBlog })
     } catch(exception) {
       setError(exception.response.data.error)
       if(exception.response.data.error === 'token expired') {
@@ -115,7 +118,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification error={error} notice={notice} />
+      <Notification error={error}  />
       { user ?
         <Homepage /> :
         <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} handleLogin={handleLogin} />}
