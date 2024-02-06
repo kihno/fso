@@ -3,16 +3,16 @@ const baseUrl = '/api/blogs'
 
 let token = null
 
-const setToken = newToken => {
+export const setToken = newToken => {
   token = `Bearer ${newToken}`
 }
 
-const getAll = async () => {
+export const getBlogs = async () => {
   const response = await axios.get(baseUrl)
   return response.data
 }
 
-const create = async newObject => {
+export const createBlog = async newObject => {
   const config = {
     headers: { Authorization: token }
   }
@@ -21,12 +21,12 @@ const create = async newObject => {
   return response.data
 }
 
-const update = async (id, newObject) => {
+export const updateBlog = async (id, newObject) => {
   const response = await axios.put(`${ baseUrl }/${id}`, newObject)
   return response.data
 }
 
-const remove = async (id) => {
+export const removeBlog = async (id) => {
   const config = {
     headers: { Authorization: token }
   }
@@ -34,6 +34,3 @@ const remove = async (id) => {
   const response = await axios.delete(`${ baseUrl }/${id}`, config)
   return response.data
 }
-
-// eslint-disable-next-line
-export default { getAll, setToken, create, update, remove }

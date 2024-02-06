@@ -4,7 +4,6 @@ const Notification = (props) => {
   const { error } = props
 
   const notification = useNotificationValue()
-  console.log(notification)
 
   return (
     <div>
