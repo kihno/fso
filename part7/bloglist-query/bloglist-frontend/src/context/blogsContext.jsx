@@ -1,11 +1,11 @@
-import { createContext, useReducer } from 'react'
+import { createContext, useContext, useReducer } from 'react'
 
 const blogsReducer = (state, action) => {
   switch (action.type) {
   case 'CREATE':
     return action.payload
   case 'UPDATE':
-    return action.payload
+    return state.map(b => b.id !== action.payload ? b : action.payload)
   case 'DELETE':
     return action.payload
   default:
@@ -23,6 +23,16 @@ export const BlogsContextProvider = (props) => {
       {props.children}
     </BlogsContext.Provider>
   )
+}
+
+export const useBlogsValue = () => {
+  const blogsAndDispatch = useContext(BlogsContext)
+  return blogsAndDispatch[0]
+}
+
+export const useBlogsDispatch = () => {
+  const blogsAndDispatch = useContext(BlogsContext)
+  return blogsAndDispatch[1]
 }
 
 export default BlogsContext

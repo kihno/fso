@@ -22,12 +22,9 @@ const BlogForm = () => {
 
   const addBlog = (event) => {
     event.preventDefault()
+
     const newBlog = { title, author, url }
-    // createBlog({
-    //   title,
-    //   author,
-    //   url
-    // })
+
     newBlogMutation.mutate(newBlog)
 
     notificationDispatch({ type: 'CREATE', payload: newBlog })

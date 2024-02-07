@@ -21,8 +21,8 @@ export const createBlog = async newObject => {
   return response.data
 }
 
-export const updateBlog = async (id, newObject) => {
-  const response = await axios.put(`${ baseUrl }/${id}`, newObject)
+export const updateBlog = async (newObject) => {
+  const response = await axios.put(`${ baseUrl }/${newObject.id}`, newObject)
   return response.data
 }
 
