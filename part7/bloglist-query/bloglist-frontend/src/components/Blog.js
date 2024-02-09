@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { updateBlog, deleteBlog } from '../services/blogs'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNotificationDispatch } from '../context/notificationContext'
+import { useUserValue } from '../context/userContext'
 
-const Blog = (props) => {
-  const { user, blog } = props
-
+const Blog = ({ blog, setError }) => {
   const queryClient = useQueryClient()
   const notificationDispatch = useNotificationDispatch()
+  const user = useUserValue()
 
   const [buttonLabel, setButtonLabel] = useState('view')
   const [hidden, setHidden] = useState(true)
@@ -40,7 +40,7 @@ const Blog = (props) => {
       notificationDispatch({ type: 'LIKE', payload: updatedBlog })
     },
     onError: (error) => {
-      notificationDispatch({ type: 'NOTICE', payload: error.response.data.error })
+      setError(error.response.data.error)
     }
   })
 
@@ -52,7 +52,7 @@ const Blog = (props) => {
       notificationDispatch({ type: 'DELETE', payload: blog })
     },
     onError: (error) => {
-      notificationDispatch({ type: 'NOTICE', payload: error.response.data.error })
+      setError(error.response.data.error)
     }
   })
 

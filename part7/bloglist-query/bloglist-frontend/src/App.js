@@ -5,27 +5,23 @@ import Login from './components/Login'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
-import loginService from './services/login'
 import Togglable from './components/Togglable'
 import NotificationContext from './context/notificationContext'
-
+import UserContext from './context/userContext'
 import { getBlogs, setToken } from './services/blogs'
 
-
 const App = () => {
-  const [user, setUser] = useState(null)
   const [error, setError] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
 
   const [notification, notificationDispatch] = useContext(NotificationContext)
+  const [user, userDispatch] = useContext(UserContext)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
 
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      userDispatch({ type: 'CREATE', payload: user })
       setToken(user.token)
     }
   }, [])
@@ -42,26 +38,9 @@ const App = () => {
     }, 5000)
   }, [notification])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-
-    try {
-      const user = await loginService.login({
-        username, password
-      })
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
-      setUser(user)
-      setToken(user.token)
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      setError('Wrong username or password')
-    }
-  }
-
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
-    setUser(null)
+    userDispatch({ type: 'DELETE' })
   }
 
   const Homepage = () => {
@@ -73,7 +52,7 @@ const App = () => {
           <BlogForm />
         </Togglable>
         {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
-          <Blog key={blog.id} blog={blog} user={user} />
+          <Blog key={blog.id} blog={blog} setError={setError} />
         )}
       </div>
     )
@@ -95,7 +74,7 @@ const App = () => {
       <Notification error={error}  />
       { user ?
         <Homepage /> :
-        <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} handleLogin={handleLogin} />}
+        <Login setError={setError} />}
     </div>
   )
 }
