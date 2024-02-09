@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { updateBlog } from '../services/blogs'
+import { updateBlog, deleteBlog } from '../services/blogs'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNotificationDispatch } from '../context/notificationContext'
 
@@ -7,7 +7,6 @@ const Blog = (props) => {
   const { user, blog } = props
 
   const queryClient = useQueryClient()
-
   const notificationDispatch = useNotificationDispatch()
 
   const [buttonLabel, setButtonLabel] = useState('view')
@@ -38,14 +37,28 @@ const Blog = (props) => {
     onSuccess: (updatedBlog) => {
       const blogs = queryClient.getQueryData(['blogs'])
       queryClient.setQueryData(['blogs'], blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog))
+      notificationDispatch({ type: 'LIKE', payload: updatedBlog })
+    },
+    onError: (error) => {
+      notificationDispatch({ type: 'NOTICE', payload: error.response.data.error })
+    }
+  })
+
+  const deleteBlogMutation = useMutation({
+    mutationFn: deleteBlog,
+    onSuccess: () => {
+      const blogs = queryClient.getQueryData(['blogs'])
+      queryClient.setQueryData(['blogs'], blogs.filter(b => b.id !== blog.id))
+      notificationDispatch({ type: 'DELETE', payload: blog })
+    },
+    onError: (error) => {
+      notificationDispatch({ type: 'NOTICE', payload: error.response.data.error })
     }
   })
 
   const updateLikes = (event) => {
     event.preventDefault()
 
-    console.log(blog)
-    //const updatedBlog = { ...blog, likes: blog.likes + 1 }
     const updatedBlog = {
       id: blog.id,
       title: blog.title,
@@ -54,18 +67,16 @@ const Blog = (props) => {
       likes: blog.likes + 1,
       user: blog.user.id
     }
-    console.log(updatedBlog)
 
     editBlogMutation.mutate(updatedBlog)
-    notificationDispatch({ type: 'LIKE', payload: updatedBlog })
   }
 
   const removeBlog = (event) => {
     event.preventDefault()
 
-    // if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-    //   deleteBlog(blog.id)
-    // }
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      deleteBlogMutation.mutate(blog.id)
+    }
   }
 
   return (

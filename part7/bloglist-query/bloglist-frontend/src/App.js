@@ -13,20 +13,12 @@ import { getBlogs, setToken } from './services/blogs'
 
 
 const App = () => {
-  //const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [error, setError] = useState(null)
-  // const [notice, setNotice] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const [notification, notificationDispatch] = useContext(NotificationContext)
-
-  // useEffect(() => {
-  //   blogService.getAll().then(blogs =>
-  //     setBlogs( blogs )
-  //   )
-  // }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -71,39 +63,6 @@ const App = () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
   }
-
-  // const addBlog = async (blogObject) => {
-  //   try {
-  //     const newBlog = await blogService.create(blogObject)
-  //     setBlogs(blogs.concat(newBlog))
-  //     notificationDispatch({ type: 'CREATE', payload: newBlog })
-  //   } catch(exception) {
-  //     setError(exception.response.data.error)
-  //     if(exception.response.data.error === 'token expired') {
-  //       setUser(null)
-  //     }
-  //   }
-  // }
-
-  // const updateBlog = async (id, blogObject) => {
-  //   try {
-  //     const updatedBlog = await blogService.update(id, blogObject)
-  //     const updatedBlogs = blogs.filter(b => b.id !== id)
-  //     setBlogs(updatedBlogs.concat(updatedBlog))
-  //   } catch(exception) {
-  //     setError(exception.response.data.error)
-  //   }
-  // }
-
-  // const deleteBlog = async (id) => {
-  //   try {
-  //     await blogService.remove(id)
-  //     const updatedBlogs = blogs.filter(b => b.id !== id)
-  //     setBlogs(updatedBlogs)
-  //   } catch(exception) {
-  //     setError(exception.response.data.error)
-  //   }
-  // }
 
   const Homepage = () => {
     return (
