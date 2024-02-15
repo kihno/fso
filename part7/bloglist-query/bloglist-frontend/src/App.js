@@ -1,28 +1,29 @@
 import { useState, useEffect, useContext } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { jwtDecode } from 'jwt-decode'
 
-import Login from './components/Login'
-import Blog from './components/Blog'
-import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
 import NotificationContext from './context/notificationContext'
-import UserContext from './context/userContext'
-import { getBlogs, setToken } from './services/blogs'
+import { useUserDispatch } from './context/userContext'
+import { setToken } from './services/blogs'
+import Home from './components/Home'
 
 const App = () => {
   const [error, setError] = useState(null)
 
   const [notification, notificationDispatch] = useContext(NotificationContext)
-  const [user, userDispatch] = useContext(UserContext)
+  const userDispatch = useUserDispatch()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
 
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      userDispatch({ type: 'CREATE', payload: user })
-      setToken(user.token)
+      const expiration = new Date(jwtDecode(user.token).exp * 1000)
+
+      if (expiration > new Date()) {
+        userDispatch({ type: 'CREATE', payload: user })
+        setToken(user.token)
+      }
     }
   }, [])
 
@@ -38,43 +39,28 @@ const App = () => {
     }, 5000)
   }, [notification])
 
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedUser')
-    userDispatch({ type: 'DELETE' })
-  }
+  // const handleLogout = () => {
+  //   window.localStorage.removeItem('loggedUser')
+  //   userDispatch({ type: 'DELETE' })
+  // }
 
-  const Homepage = () => {
-    return (
-      <div>
-        <h2>blogs</h2>
-        <p>{user.name} logged in <button id="logout-btn" onClick={handleLogout}>logout</button></p>
-        <Togglable buttonLabel="new blog">
-          <BlogForm />
-        </Togglable>
-        {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
-          <Blog key={blog.id} blog={blog} setError={setError} />
-        )}
-      </div>
-    )
-  }
-
-  const result = useQuery({
-    queryKey: ['blogs'],
-    queryFn: getBlogs
-  })
-
-  if ( result.isLoading ) {
-    return <div>loading data...</div>
-  }
-
-  const blogs = result.data
+  // const Header = () => {
+  //   return (
+  //     <div>
+  //       <h2>blogs</h2>
+  //       <p>{user.name} logged in <button id="logout-btn" onClick={handleLogout}>logout</button></p>
+  //       <BlogList setError={setError} />
+  //     </div>
+  //   )
+  // }
 
   return (
     <div>
       <Notification error={error}  />
-      { user ?
-        <Homepage /> :
-        <Login setError={setError} />}
+      <Home setError={setError} />
+      {/* { user ?
+        <Header /> :
+        <Login setError={setError} />} */}
     </div>
   )
 }
