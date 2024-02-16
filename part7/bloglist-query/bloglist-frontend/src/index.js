@@ -7,6 +7,7 @@ import './index.css'
 import App from './App'
 import { NotificationContextProvider } from './context/notificationContext'
 import { UserContextProvider } from './context/userContext'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 const queryClient = new QueryClient
 
@@ -14,7 +15,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <QueryClientProvider client={queryClient}>
     <NotificationContextProvider>
       <UserContextProvider>
-        <App />
+        <Router>
+          <App />
+        </Router>
       </UserContextProvider>
     </NotificationContextProvider>
   </QueryClientProvider>
