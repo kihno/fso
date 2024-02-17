@@ -3,7 +3,8 @@ import UserContext from '../context/userContext'
 import BlogList from './BlogList'
 import Login from './Login'
 import { Routes, Route } from 'react-router-dom'
-import Users from './Users'
+import UserList from './UserList'
+import User from './User'
 
 const Home = ({ setError }) => {
   const [user, userDispatch] = useContext(UserContext)
@@ -20,8 +21,9 @@ const Home = ({ setError }) => {
         <div>
           <p>{user.name} logged in <button id="logout-btn" onClick={handleLogout}>logout</button></p>
           <Routes>
-            <Route path ='/' element={<BlogList setError={setError} />} />
-            <Route path ='/users' element={<Users />} />
+            <Route path='/' element={<BlogList setError={setError} />} />
+            <Route path='/users' element={<UserList />} />
+            <Route path='/users/:id' element={<User />} />
           </Routes>
         </div> :
         <Login setError={setError} />}
