@@ -1,8 +1,6 @@
 import { useNotificationValue } from '../context/notificationContext'
 
-const Notification = (props) => {
-  const { error } = props
-
+const Notification = ({ error }) => {
   const notification = useNotificationValue()
 
   return (

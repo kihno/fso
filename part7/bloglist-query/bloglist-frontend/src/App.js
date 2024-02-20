@@ -65,7 +65,6 @@ const App = () => {
         <div>
           <Navbar />
           <h2>blogs</h2>
-          {/* <p>{user.name} logged in <button id="logout-btn" onClick={handleLogout}>logout</button></p> */}
           <Routes>
             <Route path='/' element={<BlogList setError={setError} />} />
             <Route path='/users' element={<UserList />} />

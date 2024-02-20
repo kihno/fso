@@ -24,6 +24,7 @@ const BlogList = () => {
 
   const blogs = result.data
 
+
   return(
     <div>
       <Togglable buttonLabel="new blog">

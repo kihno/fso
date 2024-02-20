@@ -66,6 +66,14 @@ const Blog = ({ blog, setError }) => {
       <div className='blog-likes'>{blog.likes} likes <button className='like-btn' onClick={updateLikes}>like</button></div>
       <div className='blog-user'>added by {blog.user && blog.user.name}</div>
       {blog.user && blog.user.username === user.username ? <button className="remove-btn" onClick={removeBlog}>remove</button> : null}
+      <div>
+        <h3>comments</h3>
+        <ul>
+          {blog.comments && blog.comments.map(comment =>
+            <li key={comment.id}>{comment.content}</li>
+          )}
+        </ul>
+      </div>
     </div>
   )
 }
