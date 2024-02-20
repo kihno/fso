@@ -1,9 +1,8 @@
-import { useContext } from 'react'
 import { Routes, Route, useMatch } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 
 import { getBlogs } from '../services/blogs'
-import UserContext from '../context/userContext'
+import { useUserValue } from '../context/userContext'
 import BlogList from './BlogList'
 import Login from './Login'
 import UserList from './UserList'
@@ -12,12 +11,7 @@ import Blog from './Blog'
 
 
 const Home = ({ setError }) => {
-  const [user, userDispatch] = useContext(UserContext)
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedUser')
-    userDispatch({ type: 'DELETE' })
-  }
+  const user = useUserValue()
 
   const result = useQuery({
     queryKey: ['blogs'],
@@ -37,7 +31,7 @@ const Home = ({ setError }) => {
       { user ?
         <div>
           <h2>blogs</h2>
-          <p>{user.name} logged in <button id="logout-btn" onClick={handleLogout}>logout</button></p>
+          {/* <p>{user.name} logged in <button id="logout-btn" onClick={handleLogout}>logout</button></p> */}
           <Routes>
             <Route path='/' element={<BlogList setError={setError} />} />
             <Route path='/users' element={<UserList />} />
