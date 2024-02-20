@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { updateBlog, deleteBlog } from '../services/blogs'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNotificationDispatch } from '../context/notificationContext'
@@ -8,29 +7,6 @@ const Blog = ({ blog, setError }) => {
   const queryClient = useQueryClient()
   const notificationDispatch = useNotificationDispatch()
   const user = useUserValue()
-
-  const [buttonLabel, setButtonLabel] = useState('view')
-  const [hidden, setHidden] = useState(true)
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
-  const handleClick = (event) => {
-    event.preventDefault()
-
-    if (buttonLabel === 'view') {
-      setButtonLabel('hide')
-    } else {
-      setButtonLabel('view')
-    }
-
-    setHidden(!hidden)
-  }
 
   const editBlogMutation = useMutation({
     mutationFn: updateBlog,
@@ -79,17 +55,17 @@ const Blog = ({ blog, setError }) => {
     }
   }
 
+  if (!blog) {
+    return null
+  }
+
   return (
-    <div className="blog" style={blogStyle}>
-      {blog.title} {blog.author} <button className='view-btn' onClick={handleClick}>{buttonLabel}</button>
-      { hidden ?
-        null :
-        <div className='togglableContent'>
-          <div className='blog-url'><a href={blog.url}>{blog.url}</a></div>
-          <div className='blog-likes'>{blog.likes} <button className='like-btn' onClick={updateLikes}>like</button></div>
-          <div className='blog-user'>{blog.user && blog.user.name}</div>
-          {blog.user && blog.user.username === user.username ? <button className="remove-btn" onClick={removeBlog}>remove</button> : null}
-        </div>}
+    <div className="blog">
+      <h2>{blog.title}</h2>
+      <div className='blog-url'><a href={blog.url}>{blog.url}</a></div>
+      <div className='blog-likes'>{blog.likes} likes <button className='like-btn' onClick={updateLikes}>like</button></div>
+      <div className='blog-user'>added by {blog.user && blog.user.name}</div>
+      {blog.user && blog.user.username === user.username ? <button className="remove-btn" onClick={removeBlog}>remove</button> : null}
     </div>
   )
 }

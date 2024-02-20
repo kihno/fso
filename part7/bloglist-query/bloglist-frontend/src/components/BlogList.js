@@ -1,10 +1,17 @@
 import { useQuery } from '@tanstack/react-query'
-import Blog from './Blog'
 import BlogForm from './BlogForm'
 import Togglable from './Togglable'
 import { getBlogs } from '../services/blogs'
+import { Link } from 'react-router-dom'
 
-const BlogList = ({ setError }) => {
+const BlogList = () => {
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5
+  }
 
   const result = useQuery({
     queryKey: ['blogs'],
@@ -23,7 +30,9 @@ const BlogList = ({ setError }) => {
         <BlogForm />
       </Togglable>
       {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} setError={setError} />
+        <div key={blog.id} style={blogStyle}>
+          <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
+        </div>
       )}
     </div>
   )
