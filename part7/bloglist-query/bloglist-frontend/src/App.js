@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Route, Routes, useMatch } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode'
@@ -15,8 +15,6 @@ import Login from './components/Login'
 import Navbar from './components/Navbar'
 
 const App = () => {
-  const [error, setError] = useState(null)
-
   const [notification, notificationDispatch] = useContext(NotificationContext)
   const [user, userDispatch] = useContext(UserContext)
 
@@ -33,12 +31,6 @@ const App = () => {
       }
     }
   }, [])
-
-  useEffect(() => {
-    setTimeout(() => {
-      setError(null)
-    }, 5000)
-  }, [error])
 
   useEffect(() => {
     setTimeout(() => {
@@ -60,19 +52,19 @@ const App = () => {
 
   return (
     <div>
-      <Notification error={error}  />
+      <Notification />
       { user ?
         <div>
           <Navbar />
           <h2>blogs</h2>
           <Routes>
-            <Route path='/' element={<BlogList setError={setError} />} />
+            <Route path='/' element={<BlogList />} />
             <Route path='/users' element={<UserList />} />
             <Route path='/users/:id' element={<User />} />
-            <Route path='/blogs/:id' element={<Blog blog={blog} setError={setError} />} />
+            <Route path='/blogs/:id' element={<Blog blog={blog} />} />
           </Routes>
         </div> :
-        <Login setError={setError} />}
+        <Login />}
     </div>
   )
 }

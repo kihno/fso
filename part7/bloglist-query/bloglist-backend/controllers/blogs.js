@@ -32,6 +32,7 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
 
 blogsRouter.get('/:id', async (request, response) => {
   const blog = await Blog.findById(request.params.id)
+  await blog.populate('comments')
   response.json(blog)
 })
 

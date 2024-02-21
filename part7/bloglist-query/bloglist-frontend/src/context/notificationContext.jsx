@@ -3,11 +3,13 @@ import { createContext, useContext, useReducer } from 'react'
 const notificationReducer = (state, action) => {
   switch (action.type) {
   case 'CREATE':
-    return `${action.payload.title} by ${action.payload.author} has been created`
+    return { type: action.type, message:`${action.payload.title} by ${action.payload.author} has been created` }
   case 'LIKE':
-    return `${action.payload.title} liked`
+    return { type: action.type, message:`${action.payload.title} liked` }
   case 'NOTICE':
-    return action.payload
+    return { type: action.type, message: action.payload }
+  case 'ERROR':
+    return { type: action.type, message: action.payload }
   case 'CLEAR':
     return null
   default:

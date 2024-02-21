@@ -2,8 +2,9 @@ import { updateBlog, deleteBlog } from '../services/blogs'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNotificationDispatch } from '../context/notificationContext'
 import { useUserValue } from '../context/userContext'
+//import CommentForm from './CommentForm'
 
-const Blog = ({ blog, setError }) => {
+const Blog = ({ blog }) => {
   const queryClient = useQueryClient()
   const notificationDispatch = useNotificationDispatch()
   const user = useUserValue()
@@ -16,7 +17,7 @@ const Blog = ({ blog, setError }) => {
       notificationDispatch({ type: 'LIKE', payload: updatedBlog })
     },
     onError: (error) => {
-      setError(error.response.data.error)
+      notificationDispatch({ type: 'ERROR', payload: error.response.data.error })
     }
   })
 
@@ -28,7 +29,7 @@ const Blog = ({ blog, setError }) => {
       notificationDispatch({ type: 'DELETE', payload: blog })
     },
     onError: (error) => {
-      setError(error.response.data.error)
+      notificationDispatch({ type: 'ERROR', payload: error.response.data.error })
     }
   })
 
@@ -59,6 +60,7 @@ const Blog = ({ blog, setError }) => {
     return null
   }
 
+  console.log(blog)
   return (
     <div className="blog">
       <h2>{blog.title}</h2>
@@ -68,6 +70,7 @@ const Blog = ({ blog, setError }) => {
       {blog.user && blog.user.username === user.username ? <button className="remove-btn" onClick={removeBlog}>remove</button> : null}
       <div>
         <h3>comments</h3>
+        {/* <CommentForm blog={blog} /> */}
         <ul>
           {blog.comments && blog.comments.map(comment =>
             <li key={comment.id}>{comment.content}</li>

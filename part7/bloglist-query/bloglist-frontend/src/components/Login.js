@@ -3,12 +3,14 @@ import { useState } from 'react'
 import loginService from '../services/login'
 import { setToken } from '../services/blogs'
 import { useUserDispatch } from '../context/userContext'
+import { useNotificationDispatch } from '../context/notificationContext'
 
-const Login = ({ setError }) => {
+const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const userDispatch = useUserDispatch()
+  const notificationDispatch = useNotificationDispatch()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -23,7 +25,7 @@ const Login = ({ setError }) => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setError('Wrong username or password')
+      notificationDispatch({ type: 'ERROR', payload: 'Wrong username or password' })
     }
   }
 
