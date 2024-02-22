@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNotificationDispatch } from '../context/notificationContext'
 import { createBlog } from '../services/blogs'
+import { Button, Form } from 'react-bootstrap'
 
 const BlogForm = () => {
   const queryClient = useQueryClient()
@@ -36,18 +37,21 @@ const BlogForm = () => {
   return (
     <div>
       <h2>create new</h2>
-      <form onSubmit={addBlog}>
-        <div>
-          title: <input id="title" type="text" value ={title} name="Username" onChange={({ target }) => setTitle(target.value)} />
-        </div>
-        <div>
-          author: <input id="author" type="text" value ={author} name="Username" onChange={({ target }) => setAuthor(target.value)} />
-        </div>
-        <div>
-          url: <input id="url" type="text" value ={url} name="Username" onChange={({ target }) => setUrl(target.value)} />
-        </div>
-        <button id="submit-btn" type="submit">create</button>
-      </form>
+      <Form onSubmit={addBlog}>
+        <Form.Group>
+          <Form.Label>title:</Form.Label>
+          <Form.Control type="text" value ={title} name="title" onChange={({ target }) => setTitle(target.value)} />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>author:</Form.Label>
+          <Form.Control type="text" value ={author} name="author" onChange={({ target }) => setAuthor(target.value)} />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>url:</Form.Label>
+          <Form.Control type="text" value ={url} name="url" onChange={({ target }) => setUrl(target.value)} />
+        </Form.Group>
+        <Button variant='primary' type="submit">create</Button>
+      </Form>
     </div>
   )
 }

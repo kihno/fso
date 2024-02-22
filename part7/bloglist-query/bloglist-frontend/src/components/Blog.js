@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNotificationDispatch } from '../context/notificationContext'
 import { useUserValue } from '../context/userContext'
 import CommentForm from './CommentForm'
+import { Button, Card, ListGroup } from 'react-bootstrap'
 
 const Blog = ({ blog }) => {
   const queryClient = useQueryClient()
@@ -61,22 +62,24 @@ const Blog = ({ blog }) => {
   }
 
   return (
-    <div className="blog">
-      <h2>{blog.title}</h2>
-      <div className='blog-url'><a href={blog.url}>{blog.url}</a></div>
-      <div className='blog-likes'>{blog.likes} likes <button className='like-btn' onClick={updateLikes}>like</button></div>
-      <div className='blog-user'>added by {blog.user && blog.user.name}</div>
-      {blog.user && blog.user.username === user.username ? <button className="remove-btn" onClick={removeBlog}>remove</button> : null}
-      <div>
-        <h3>comments</h3>
-        <CommentForm blog={blog} />
-        <ul>
+    <Card className="blog">
+      <Card.Body>
+        <Card.Title>{blog.title}</Card.Title>
+        <Card.Subtitle className='mb-2 text-muted'>added by {blog.user && blog.user.name}</Card.Subtitle>
+        <Card.Link href='blog.url'>{blog.url}</Card.Link>
+        <Card.Text>{blog.likes} likes <Button variant='success' size='sm' onClick={updateLikes}>like</Button></Card.Text>
+        <Card.Text>{blog.user && blog.user.username === user.username ? <Button variant='danger' size='sm' onClick={removeBlog}>remove</Button> : null}</Card.Text>
+        <Card.Header>Comments</Card.Header>
+        <ListGroup variant='flush'>
+          <ListGroup.Item>
+            <CommentForm blog={blog} />
+          </ListGroup.Item>
           {blog.comments && blog.comments.map(comment =>
-            <li key={comment.id}>{comment.content}</li>
+            <ListGroup.Item key={comment.id}>{comment.content}</ListGroup.Item>
           )}
-        </ul>
-      </div>
-    </div>
+        </ListGroup>
+      </Card.Body>
+    </Card>
   )
 }
 

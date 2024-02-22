@@ -30,7 +30,7 @@ const UserList = () => {
               <td>
                 <Link to={`/users/${user.id}`}>{user.name}</Link>
               </td>
-              <td>{user.blogs.length}</td>
+              <td style={{ textAlign: 'center' }}>{user.blogs.length}</td>
             </tr>
           )}
         </tbody>

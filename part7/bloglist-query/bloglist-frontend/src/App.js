@@ -12,7 +12,7 @@ import UserList from './components/UserList'
 import User from './components/User'
 import Blog from './components/Blog'
 import Login from './components/Login'
-import Navbar from './components/Navbar'
+import Navigation from './components/Navigation'
 
 const App = () => {
   const [notification, notificationDispatch] = useContext(NotificationContext)
@@ -51,12 +51,11 @@ const App = () => {
     : null
 
   return (
-    <div>
+    <div className='container'>
       <Notification />
       { user ?
         <div>
-          <Navbar />
-          <h2>blogs</h2>
+          <Navigation />
           <Routes>
             <Route path='/' element={<BlogList />} />
             <Route path='/users' element={<UserList />} />

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Form, Button } from 'react-bootstrap'
 
 import loginService from '../services/login'
 import { setToken } from '../services/blogs'
@@ -32,15 +33,17 @@ const Login = () => {
   return (
     <div>
       <h2>Log in to application</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          username <input id="username" type="text" value ={username} name="Username" onChange={({ target }) => setUsername(target.value)} />
-        </div>
-        <div>
-          password <input id="password" type="password" value ={password} name="Password" onChange={({ target }) => setPassword(target.value)} />
-        </div>
-        <button id="login-btn" type="submit">login</button>
-      </form>
+      <Form onSubmit={handleLogin}>
+        <Form.Group>
+          <Form.Label>username</Form.Label>
+          <Form.Control type='text' name='username' value ={username} onChange={({ target }) => setUsername(target.value)} />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>password</Form.Label>
+          <Form.Control type='password' name='password' value ={password} onChange={({ target }) => setPassword(target.value)} />
+        </Form.Group>
+        <Button variant='primary' type="submit">login</Button>
+      </Form>
     </div>
   )
 }

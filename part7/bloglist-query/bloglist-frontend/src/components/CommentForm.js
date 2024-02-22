@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { updateBlog } from '../services/blogs'
 import { useNotificationDispatch } from '../context/notificationContext'
+import { Button, Form } from 'react-bootstrap'
 
 const CommentForm = ({ blog }) => {
   const queryClient = useQueryClient()
@@ -43,10 +44,10 @@ const CommentForm = ({ blog }) => {
   }
 
   return(
-    <form onSubmit={addComment}>
-      <input id="comment" type="text" value ={comment} name="Comment" onChange={({ target }) => setComment(target.value)} />
-      <button id="submit-btn" type="submit">add comment</button>
-    </form>
+    <Form onSubmit={addComment}>
+      <Form.Control type="text" value ={comment} name="Comment" onChange={({ target }) => setComment(target.value)} />
+      <Button variant='success' size='sm' type="submit">add comment</Button>
+    </Form>
   )
 }
 

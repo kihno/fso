@@ -1,3 +1,4 @@
+import { Alert } from 'react-bootstrap'
 import { useNotificationValue } from '../context/notificationContext'
 
 const Notification = () => {
@@ -10,11 +11,9 @@ const Notification = () => {
   return (
     <div>
       { notification.type === 'ERROR'
-        ? <div className="error">{notification.message}</div>
-        : <div className="notice">{notification.message}</div>
+        ? <Alert variant='danger'>{notification.message}</Alert>
+        : <Alert variant='success'>{notification.message}</Alert>
       }
-      {/* { error ? <div className="error">{error}</div> : null }
-      { notification ? <div className="notice">{notification}</div> : null } */}
     </div>
   )
 }
