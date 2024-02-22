@@ -17,6 +17,7 @@ const BlogForm = () => {
     onSuccess: (newBlog) => {
       const blogs = queryClient.getQueryData(['blogs'])
       queryClient.setQueryData(['blogs'], blogs.concat(newBlog))
+      notificationDispatch({ type: 'CREATE', payload: newBlog })
     }
   })
 
@@ -26,8 +27,6 @@ const BlogForm = () => {
     const newBlog = { title, author, url }
 
     newBlogMutation.mutate(newBlog)
-
-    notificationDispatch({ type: 'CREATE', payload: newBlog })
 
     setTitle('')
     setAuthor('')

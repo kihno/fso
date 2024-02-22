@@ -15,31 +15,37 @@ const CommentForm = ({ blog }) => {
     onSuccess: (updatedBlog) => {
       const blogs = queryClient.getQueryData(['blogs'])
       queryClient.setQueryData(['blogs'], blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog))
-      notificationDispatch({ type: 'LIKE', payload: updatedBlog })
     },
     onError: (error) => {
-      setError(error.response.data.error)
+      notificationDispatch({ type: 'ERROR', payload: error.response.data.error })
     }
   })
 
   const addComment = (event) => {
     event.preventDefault()
 
-    const newComment = {
-      content: comment,
-      id: uuidv4()
+    const updatedBlog = {
+      id: blog.id,
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes,
+      user: blog.user.id,
+      comments: blog.comments.concat({
+        content: comment,
+        id: uuidv4()
+      })
     }
 
-    const updatedBlog = {
-      ...blog,
-      comments: blog.comments.concat(newComment)
-    }
+    editBlogMutation.mutate(updatedBlog)
+
+    setComment('')
   }
 
   return(
     <form onSubmit={addComment}>
       <input id="comment" type="text" value ={comment} name="Comment" onChange={({ target }) => setComment(target.value)} />
-      <button id="submit-btn" type="submit">create</button>
+      <button id="submit-btn" type="submit">add comment</button>
     </form>
   )
 }

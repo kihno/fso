@@ -2,7 +2,7 @@ import { updateBlog, deleteBlog } from '../services/blogs'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNotificationDispatch } from '../context/notificationContext'
 import { useUserValue } from '../context/userContext'
-//import CommentForm from './CommentForm'
+import CommentForm from './CommentForm'
 
 const Blog = ({ blog }) => {
   const queryClient = useQueryClient()
@@ -60,7 +60,6 @@ const Blog = ({ blog }) => {
     return null
   }
 
-  console.log(blog)
   return (
     <div className="blog">
       <h2>{blog.title}</h2>
@@ -70,7 +69,7 @@ const Blog = ({ blog }) => {
       {blog.user && blog.user.username === user.username ? <button className="remove-btn" onClick={removeBlog}>remove</button> : null}
       <div>
         <h3>comments</h3>
-        {/* <CommentForm blog={blog} /> */}
+        <CommentForm blog={blog} />
         <ul>
           {blog.comments && blog.comments.map(comment =>
             <li key={comment.id}>{comment.content}</li>
